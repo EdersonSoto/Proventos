@@ -1,0 +1,86 @@
+
+
+PROJETO PROVENTOS - COMANDOS E PASSOS UTILIZADOS
+
+
+********** Abrir a pagina *******************************
+
+cd C:\Investimentos\Proventos\app
+streamlit run app_sqlite.py
+
+*********************************************************
+
+********** Versionar ************************************
+git add .
+git commit -m "Dashboard SQLite v1.1 estável"
+git push
+
+*********************************************************
+
+1. INSTALAÇÃO DO GIT
+git --version
+winget install --id Git.Git -e --source winget
+
+2. CONFIGURAÇÃO DO GIT
+git config --global user.name "Ederson Soto"
+git config --global user.email "SEU_EMAIL"
+git config --global --list
+
+3. CRIAR REPOSITÓRIO GIT
+cd C:\Investimentos\Proventos
+git init
+git status
+
+4. ADICIONAR ARQUIVOS
+git add .
+git status
+
+5. PRIMEIRO COMMIT
+git commit -m "Versao inicial sistema de proventos"
+
+6. ENVIAR PARA GITHUB
+git push
+
+7. HISTÓRICO DE COMMITS
+git log --oneline -5
+
+8. EXECUTAR STREAMLIT
+cd C:\Investimentos\Proventos\app
+streamlit run app_sqlite.py
+
+9. IMPORTAR EXTRATOS DA CLEAR
+python importar_csv.py
+
+10. TESTAR BANCO SQLITE
+python teste_banco.py
+
+11. ATUALIZAR PROJETO
+git add .
+git commit -m "Descricao da alteracao"
+git push
+
+12. CLONAR EM OUTRO PC
+git clone https://github.com/EdersonSoto/Proventos.git
+
+pip install streamlit pandas plotly openpyxl yfinance
+
+cd app
+streamlit run app_sqlite.py
+
+BACKUP RECOMENDADO
+GitHub -> Código
+Google Drive -> Banco SQLite
+
+FUNCIONALIDADES IMPLEMENTADAS
+- SQLite
+- Importação automática da Clear
+- Dashboard Streamlit
+- Filtros
+- Gráfico mensal
+- Gráfico anual
+- Evolução acumulada
+- Pizza Ações x FIIs
+- Meta mensal
+- Ranking de ativos
+- GitHub
+- Controle de versão
