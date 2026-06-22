@@ -1,0 +1,24 @@
+
+# Python
+__pycache__/
+*.pyc
+
+# Banco SQLite
+database/*.db
+
+# Arquivos da Clear
+csv/*.xlsx
+csv/*.csv
+
+# Pastas temporárias
+backup/
+logs/
+temp/
+
+# Ambiente virtual
+.venv/
+venv/
+
+# Windows
+Thumbs.db
+
