@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from backup import criar_backup_automatico
 from banco import conectar
 from importar_csv import importar_proventos
 
@@ -14,6 +15,10 @@ st.set_page_config(
 # ==================================
 # IMPORTAÇÃO AUTOMÁTICA
 # ==================================
+
+if "backup_automatico" not in st.session_state:
+
+    st.session_state.backup_automatico = criar_backup_automatico()
 
 importados = importar_proventos()
 
@@ -137,6 +142,47 @@ st.title("📈 Controle de Dividendos")
 st.success(
     f"{importados} novos registros importados."
 )
+
+backup_automatico = st.session_state.backup_automatico
+
+if backup_automatico["ok"]:
+
+    google_drive_online = backup_automatico.get(
+        "google_drive_online"
+    )
+
+    if (
+        google_drive_online
+        and google_drive_online["enviado"]
+    ):
+
+        st.sidebar.success(
+            "Backup automatico enviado ao Google Drive online."
+        )
+
+    elif backup_automatico["google_drive"]:
+
+        st.sidebar.success(
+            "Backup automatico criado no Google Drive."
+        )
+
+    else:
+
+        st.sidebar.warning(
+            "Backup local criado. Google Drive online nao configurado."
+        )
+
+        if google_drive_online and google_drive_online["erro"]:
+
+            st.sidebar.caption(
+                google_drive_online["erro"]
+            )
+
+else:
+
+    st.sidebar.warning(
+        backup_automatico["erro"]
+    )
 
 # ==================================
 # RESUMO

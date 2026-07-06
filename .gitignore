@@ -15,6 +15,10 @@ backup/
 logs/
 temp/
 
+# Credenciais locais
+config/google_credentials.json
+config/google_token.json
+
 # Ambiente virtual
 .venv/
 venv/

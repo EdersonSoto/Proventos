@@ -45,6 +45,11 @@ O Git/GitHub passa a ser a memoria permanente do projeto. O chat deve ser usado 
 - Adicionada mensagem quando filtros nao retornam lancamentos.
 - Protegida a media mensal contra valor vazio.
 - Confirmado que o banco possui tipos de acao e FII gravados corretamente no SQLite e exibidos corretamente no app.
+- Adicionado backup automatico do banco ao abrir o app.
+- O backup e salvo sempre na pasta local `backup/`.
+- Quando o Google Drive e encontrado no computador, uma copia tambem e salva no Drive.
+- Adicionado suporte a envio online para Google Drive via API, sem depender da pasta sincronizada no PC.
+- Para envio online, configurar `PROVENTOS_GOOGLE_DRIVE_FOLDER_ID` e salvar as credenciais em `config/google_credentials.json`.
 
 ### Como rodar
 
@@ -59,6 +64,23 @@ Ou:
 cd C:\Investimentos\Proventos\app
 streamlit run app_sqlite.py
 ```
+
+### Configuracao do Google Drive online
+
+O backup online usa a API do Google Drive.
+
+Arquivos locais esperados:
+
+- `config/google_credentials.json`: credenciais OAuth baixadas no Google Cloud.
+- `config/google_token.json`: token gerado automaticamente no primeiro login.
+
+Variavel obrigatoria:
+
+```powershell
+$env:PROVENTOS_GOOGLE_DRIVE_FOLDER_ID="ID_DA_PASTA_DO_GOOGLE_DRIVE"
+```
+
+Os arquivos de credenciais e token ficam fora do GitHub por seguranca.
 
 ### Proximos passos sugeridos
 

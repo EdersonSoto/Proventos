@@ -81,7 +81,7 @@ Prioridade sugerida:
 
 1. Cadastro manual de proventos.
 2. Exportacao para Excel.
-3. Backup automatico do banco SQLite.
+3. Backup automatico do banco SQLite: implementado com copia local e suporte a Google Drive online.
 4. Separacao em paginas Streamlit.
 5. Cadastro de carteira.
 6. Cadastro de operacoes de compra e venda.
