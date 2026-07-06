@@ -119,6 +119,14 @@ if ativo_selecionado != "Todos":
         == ativo_selecionado
     ]
 
+if dados.empty:
+
+    st.warning(
+        "Nenhum lançamento encontrado para os filtros selecionados."
+    )
+
+    st.stop()
+
 # ==================================
 # TÍTULO
 # ==================================
@@ -156,6 +164,10 @@ media_mensal = (
     .sum()
     .mean()
 )
+
+if pd.isna(media_mensal):
+
+    media_mensal = 0
 
 c1, c2, c3, c4 = st.columns(4)
 
@@ -346,9 +358,6 @@ resumo_tipo = (
     .sum()
     .reset_index()
 )
-
-st.write("DEBUG RESUMO TIPO")
-st.dataframe(resumo_tipo)
 
 resumo_tipo["Mes"] = (
     resumo_tipo["Mes"]
