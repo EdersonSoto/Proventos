@@ -1,18 +1,13 @@
 
 import sqlite3
 import os
+from pathlib import Path
 
-PASTA_DB = r"C:\Investimentos\Proventos\database"
+BASE_DIR = Path(__file__).resolve().parent.parent
+PASTA_DB = BASE_DIR / "database"
+PASTA_DB.mkdir(exist_ok=True)
 
-os.makedirs(
-    PASTA_DB,
-    exist_ok=True
-)
-
-BANCO = os.path.join(
-    PASTA_DB,
-    "proventos.db"
-)
+BANCO = PASTA_DB / "proventos.db"
 
 def conectar():
 
@@ -34,4 +29,3 @@ def conectar():
     conn.commit()
 
     return conn
-

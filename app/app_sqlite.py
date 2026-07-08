@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 from backup import criar_backup_automatico
+# from backup import sincronizar_banco_de_dados # Função não existe em backup.py
 from banco import conectar
 from importar_csv import importar_proventos
 
@@ -13,12 +14,20 @@ st.set_page_config(
 )
 
 # ==================================
-# IMPORTAÇÃO AUTOMÁTICA
+# SINCRONIZAÇÃO E BACKUP
 # ==================================
 
 if "backup_automatico" not in st.session_state:
-
+    # A função sincronizar_banco_de_dados() não foi encontrada no contexto fornecido.
+    # if "sincronizado" not in st.session_state:
+    #     with st.spinner("Sincronizando banco de dados com o Google Drive..."):
+    #         resultado_sync = sincronizar_banco_de_dados()
+    #         st.session_state.sincronizado = resultado_sync
+    st.session_state.sincronizado = None # Placeholder
     st.session_state.backup_automatico = criar_backup_automatico()
+# ==================================
+# IMPORTAÇÃO AUTOMÁTICA
+# ==================================
 
 importados = importar_proventos()
 
@@ -144,6 +153,16 @@ st.success(
 )
 
 backup_automatico = st.session_state.backup_automatico
+resultado_sync = st.session_state.get("sincronizado")
+if resultado_sync:
+    status = resultado_sync.get("status")
+    mensagem = resultado_sync.get("mensagem")
+    if status == "ok":
+        st.sidebar.success(mensagem)
+    elif status == "info":
+        st.sidebar.info(mensagem)
+    elif status == "erro":
+        st.sidebar.error(mensagem)
 
 if backup_automatico["ok"]:
 
@@ -368,9 +387,6 @@ st.plotly_chart(
 # ==================================
 
 st.subheader(
-    "📊 Ações x FIIs por mês")
-
-st.subheader(
     "🥧 Distribuição Ações x FIIs"
 )
 
@@ -394,7 +410,9 @@ st.plotly_chart(
     use_container_width=True
 )
 
-
+st.subheader(
+    "📊 Ações x FIIs por mês"
+)
 
 
 resumo_tipo = (

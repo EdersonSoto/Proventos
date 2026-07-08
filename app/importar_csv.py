@@ -142,7 +142,8 @@ def importar_proventos():
 
                     data_pagamento = (
                         pd.to_datetime(
-                            linha[coluna_data]
+                            linha[coluna_data],
+                            errors='coerce'
                         )
                         .strftime("%Y-%m-%d")
                     )

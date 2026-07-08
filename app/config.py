@@ -1,13 +1,19 @@
 
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 
-PASTA_CSV = r"C:\Investimentos\Proventos\csv"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-PASTA_BACKUP = r"C:\Investimentos\Proventos\backup"
+load_dotenv(BASE_DIR / "envie.env")
 
-PASTA_RELATORIOS = r"C:\Investimentos\Proventos\relatorios"
+PASTA_CSV = BASE_DIR / "csv"
 
-PASTA_TEMP = r"C:\Investimentos\Proventos\temp"
+PASTA_BACKUP = BASE_DIR / "backup"
+
+PASTA_RELATORIOS = BASE_DIR / "relatorios"
+
+PASTA_TEMP = BASE_DIR / "temp"
 
 for pasta in [
     PASTA_CSV,
@@ -19,4 +25,3 @@ for pasta in [
         pasta,
         exist_ok=True
     )
-

@@ -45,15 +45,22 @@ def encontrar_pasta_google_drive():
     return None
 
 
+
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 def obter_caminho_config(nome_variavel, nome_arquivo):
 
     caminho = os.getenv(nome_variavel)
 
     if caminho:
-
         return Path(caminho)
 
-    return Path("config") / nome_arquivo
+    return BASE_DIR / "config" / nome_arquivo
+
+
+
 
 
 def enviar_google_drive_online(arquivo_backup):
@@ -163,23 +170,24 @@ def enviar_google_drive_online(arquivo_backup):
         mimetype="application/x-sqlite3",
         resumable=False,
     )
-
-    arquivo = (
-        servico.files()
-        .create(
-            body=metadados,
-            media_body=media,
-            fields="id, webViewLink",
+    try:
+        arquivo = (
+            servico.files()
+            .create(
+                body=metadados,
+                media_body=media,
+                fields="id, webViewLink",
+            )
+            .execute()
         )
-        .execute()
-    )
-
-    return {
-        "enviado": True,
-        "arquivo_id": arquivo.get("id"),
-        "link": arquivo.get("webViewLink"),
-        "erro": None,
-    }
+        return {
+            "enviado": True,
+            "arquivo_id": arquivo.get("id"),
+            "link": arquivo.get("webViewLink"),
+            "erro": None,
+        }
+    finally:
+        media.stream().close()
 
 
 def criar_backup_automatico():

@@ -99,3 +99,6 @@ git add .
 git commit -m "Registra historico e ajustes do dashboard"
 git push
 ```
+
+para instalar as ferramentas online API google
+pip install -r requirements.txt
