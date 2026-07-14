@@ -1,45 +1,50 @@
-; Script for Inno Setup
-; http://www.jrsoftware.org/isinfo.php
+;====================================================
+; Controle de Proventos
+; Instalador Inno Setup
+;====================================================
+
+#define MyAppName "Controle de Proventos"
+#define MyAppVersion "1.0.0"
+#define MyAppPublisher "Soto Company"
+#define MyAppExeName "ProventosApp.exe"
 
 [Setup]
-AppName=Controle de Proventos
-AppVersion=1.0
-AppPublisher=Soto Company
-DefaultDirName={autopf}\Controle de Proventos
-DefaultGroupName=Controle de Proventos
-DisableProgramGroupPage=yes
-OutputBaseFilename=Proventos_Setup_v1.0
-Compression=lzma
+AppId={{A2D57D0F-2A8B-4A74-8B34-0B4E6F2D1A01}
+AppName={#MyAppName}
+AppVersion={#MyAppVersion}
+AppPublisher={#MyAppPublisher}
+
+DefaultDirName={autopf}\{#MyAppName}
+DefaultGroupName={#MyAppName}
+
+OutputDir=Output
+OutputBaseFilename=Controle_de_Proventos_Setup
+
+Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-UninstallDisplayIcon={app}\ProventosApp.exe
 
-; --- ARQUIVOS ---
-; Pega todos os arquivos da pasta 'dist/Proventos' gerada pelo PyInstaller
-; e os coloca no diretório de instalação {app}.
+PrivilegesRequired=admin
+ArchitecturesInstallIn64BitMode=x64compatible
+
+DisableProgramGroupPage=yes
+
+SetupIconFile=assets\icon.ico
+
+UninstallDisplayIcon={app}\{#MyAppExeName}
+
+[Languages]
+Name: "portuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
+
+[Tasks]
+Name: "desktopicon"; Description: "Criar atalho na Área de Trabalho"; Flags: unchecked
+
 [Files]
-Source: "..\dist\Proventos\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\Proventos\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-; --- ÍCONES E ATALHOS ---
 [Icons]
-; Atalho no Menu Iniciar
-Name: "{group}\Controle de Proventos"; Filename: "{app}\ProventosApp.exe"
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
-; Atalho na Área de Trabalho (opcional)
-Name: "{autodesktop}\Controle de Proventos"; Filename: "{app}\ProventosApp.exe"; Tasks: desktopicon
-
-; --- TAREFAS PÓS-INSTALAÇÃO ---
-; Pergunta ao usuário se ele deseja criar um atalho na área de trabalho.
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
-
-; --- EXECUTAR APÓS A INSTALAÇÃO ---
-; Abre o aplicativo automaticamente após a instalação ser concluída.
 [Run]
-Filename: "{app}\ProventosApp.exe"; Description: "{cm:LaunchProgram,Controle de Proventos}"; Flags: nowait postinstall skipifsilent
-
-; --- REGISTRO DO DESINSTALADOR ---
-; Garante que o aplicativo apareça em "Adicionar ou remover programas".
-[UninstallDelete]
-Type: filesandordirs; Name: "{app}"
+Filename: "{app}\{#MyAppExeName}"; Description: "Executar {#MyAppName}"; Flags: nowait postinstall skipifsilent

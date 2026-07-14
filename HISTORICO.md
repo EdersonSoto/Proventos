@@ -1,5 +1,48 @@
 # Historico do Projeto Proventos
 
+## 2026-07-13
+
+### Icone do executavel e do instalador
+
+- Criado `assets/icon.ico` (moeda verde/dourada com grafico de crescimento),
+  gerado programaticamente com Pillow via `assets/gerar_icone.py` (sem depender
+  de imagem externa). Aplicado no `build.spec` (`EXE(..., icon=...)`) e no
+  `proventos_setup.iss` (`SetupIconFile`), valendo tanto para o `.exe` quanto
+  para os atalhos e o instalador em si.
+
+### Botao de fechar o programa
+
+- Adicionado botao "Fechar Programa" na barra lateral (`app/app_sqlite.py`). Ao
+  clicar, mostra uma mensagem de despedida e encerra o processo (`os._exit(0)`)
+  apos um pequeno atraso em thread separada, fechando o servidor Streamlit e o
+  console de forma limpa, sem precisar fechar a janela do terminal manualmente.
+
+### Projeto preparado para gerar o instalador (PyInstaller + Inno Setup) em outro computador
+
+- Corrigido bug critico no `build.spec`: os modulos de `app/` (config.py, backup.py,
+  importar_csv.py) sao executados dinamicamente pelo Streamlit e nao eram vistos pela
+  `Analysis`, entao o `python-dotenv` (import obrigatorio em `config.py`) nao era
+  empacotado e o executavel quebrava ao abrir em outro computador. Adicionado
+  `collect_all` para `dotenv` e para as bibliotecas do Google Drive.
+- Corrigido o `COLLECT` do `build.spec`: as tuplas `("app", "app")` etc. nao sao mais
+  aceitas pela versao atual do PyInstaller; substituidas por `Tree(...)`.
+- `requirements.txt` completado (faltava `python-dotenv`) e com versoes fixadas,
+  incluindo `pyinstaller`, para reproduzir o mesmo ambiente em outro computador.
+- Build validado localmente: `pyinstaller build.spec` e depois `ISCC proventos_setup.iss`
+  geraram `Output\Controle_de_Proventos_Setup.exe` com sucesso, e o executavel
+  (`dist\Proventos\ProventosApp.exe`) sobe o dashboard Streamlit normalmente.
+- `build/` e `dist/` (saida gerada do PyInstaller, milhares de arquivos binarios)
+  removidos do controle de versao e adicionados ao `.gitignore`, junto com `Output/`.
+- Adicionado `build.ps1` para automatizar `pip install` + PyInstaller + Inno Setup em
+  um unico comando.
+- Adicionados `database/.gitkeep` e `csv/.gitkeep` para que essas pastas (referenciadas
+  pelo `build.spec`) existam apos um `git clone` novo, mesmo com o conteudo ignorado.
+- Removido `app/app.py` (versao antiga do dashboard, com caminho fixo
+  `C:\Investimentos\Proventos\csv`, ja substituida por `app/app_sqlite.py`).
+- `config/ID cliente.txt` (Client ID OAuth do Google, nao usado por nenhum codigo)
+  removido do controle de versao, por consistencia com as demais credenciais em
+  `config/`.
+
 ## 2026-07-06
 
 Projeto em Python com Streamlit e SQLite para controle de dividendos de acoes e FIIs.

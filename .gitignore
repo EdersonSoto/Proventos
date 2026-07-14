@@ -18,6 +18,7 @@ temp/
 # Credenciais locais
 config/google_credentials.json
 config/google_token.json
+config/ID cliente.txt
 envie.env
 
 # Ambiente virtual
@@ -26,6 +27,11 @@ venv/
 
 # Windows
 Thumbs.db
+
+# Build do PyInstaller e instalador do Inno Setup (gerados, nao versionar)
+build/
+dist/
+Output/
 
 
 

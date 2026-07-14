@@ -1,4 +1,8 @@
 
+import os
+import threading
+import time
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -12,6 +16,40 @@ st.set_page_config(
     page_title="Controle de Dividendos",
     layout="wide"
 )
+
+# ==================================
+# FECHAR PROGRAMA
+# ==================================
+
+def _encerrar_programa(atraso=0.8):
+
+    time.sleep(atraso)
+
+    os._exit(0)
+
+
+if st.sidebar.button(
+    "🔴 Fechar Programa",
+    use_container_width=True
+):
+    st.session_state.encerrando = True
+
+if st.session_state.get("encerrando"):
+
+    st.title("👋 Até logo!")
+
+    st.success(
+        "Controle de Proventos encerrado. Você já pode fechar esta janela."
+    )
+
+    threading.Thread(
+        target=_encerrar_programa,
+        daemon=True
+    ).start()
+
+    st.stop()
+
+st.sidebar.divider()
 
 # ==================================
 # SINCRONIZAÇÃO E BACKUP

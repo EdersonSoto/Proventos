@@ -1,17 +1,47 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+
 from PyInstaller.utils.hooks import collect_all
 
-# Coleta todos os data files, metadata, e binaries do streamlit e suas dependências
-datas, binaries, hiddenimports = collect_all('streamlit')
-datas.extend(collect_all('pandas')[0])
-datas.extend(collect_all('plotly')[0])
-datas.extend(collect_all('openpyxl')[0])
+datas = []
+binaries = []
+hiddenimports = []
+
+# NOTA: run.py so importa o streamlit.web.cli; os modulos em app/ (config.py,
+# banco.py, backup.py, importar_csv.py) sao executados dinamicamente pelo
+# Streamlit e NAO sao vistos pela Analysis. Por isso todo pacote que eles
+# importam precisa ser listado aqui manualmente.
+for pkg in [
+    "streamlit",
+    "pandas",
+    "plotly",
+    "openpyxl",
+    "dotenv",
+    "googleapiclient",
+    "google_auth_oauthlib",
+    "google_auth_httplib2",
+]:
+    d, b, h = collect_all(pkg)
+    datas += d
+    binaries += b
+    hiddenimports += h
+
+hiddenimports += [
+    "google.auth",
+    "google.auth.transport.requests",
+    "google.oauth2.credentials",
+]
+
+# envie.env (ID da pasta do Google Drive, metas, etc.) precisa ir junto para o
+# app se comportar no computador de destino exatamente como neste PC.
+if os.path.isfile("envie.env"):
+    datas.append(("envie.env", "."))
 
 
 a = Analysis(
-    ['run.py'], # Script principal que executa o app
-    pathex=['c:\\Investimentos\\Proventos'],
+    ["run.py"],
+    pathex=["."],
     binaries=binaries,
     datas=datas,
     hiddenimports=hiddenimports,
@@ -19,37 +49,38 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=None,
     noarchive=False,
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=None)
+
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
     [],
     exclude_binaries=True,
-    name='ProventosApp',
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    console=True, # Mantenha True para ver logs do streamlit/erros
-    disable_windowed_traceback=False,
-    argv_emulation=False,
-    target_arch=None,
-    codesign_identity=None,
-    entitlements_file=None,
+    name="ProventosApp",
+    console=True,
+    icon="assets/icon.ico",
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
     a.zipfiles,
     a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='Proventos', # Nome da pasta que será criada em 'dist'
+
+    # COPIAR A PASTA app
+    Tree("app", prefix="app", excludes=["__pycache__"]),
+
+    # COPIAR O BANCO
+    Tree("database", prefix="database"),
+
+    # CONFIGURAÇÕES
+    Tree("config", prefix="config"),
+
+    # CSV
+    Tree("csv", prefix="csv"),
+
+    name="Proventos",
 )
